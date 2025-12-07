@@ -898,6 +898,16 @@
             const addr = place.road_address_name || place.address_name || "주소 정보 없음";
             addressSpan.textContent = addr;
           }
+
+          // 🧭 길찾기 링크 세팅
+          const directionLink = document.getElementById("directionLink");
+          if (directionLink) {
+            const lat = place.y;   // 위도
+            const lng = place.x;   // 경도
+            const name = encodeURIComponent(place.place_name || placeName);
+            directionLink.href = `https://map.kakao.com/link/to/${name},${lat},${lng}`;
+          }
+
         } else {
           if (addressSpan) {
             addressSpan.textContent = "주소를 찾지 못했습니다. (지도에서 가게 이름으로 검색해 보세요)";
@@ -940,6 +950,7 @@
         .map((t) => `<span class="badge tag-sub">${t}</span>`)
         .join("");
 
+      // ✅ 결과 카드 + 길찾기 버튼까지 포함
       resultDiv.innerHTML = `
         <div class="result-title">오늘의 추천</div>
         <div class="place-name">${pick.name}</div>
@@ -950,6 +961,21 @@
           ${mainTagHtml}
           ${otherTags}
         </div>
+        <div style="margin-top:8px;">
+          <a id="directionLink" href="#" target="_blank" style="
+            font-size:0.8rem;
+            text-decoration:none;
+            display:inline-flex;
+            align-items:center;
+            gap:4px;
+            padding:4px 10px;
+            border-radius:999px;
+            border:1px solid #d1d5db;
+            background:#ffffff;
+          ">
+            🧭 카카오맵으로 길찾기 열기
+          </a>
+        </div>
       `;
 
       showPlaceOnMap(pick.name);
@@ -957,6 +983,3 @@
   </script>
 </body>
 </html>
-
-
-
